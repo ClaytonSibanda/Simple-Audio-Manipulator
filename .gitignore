@@ -1,0 +1,8 @@
+*.o
+*.pdf
+*.zip
+*.raw
+/worked_examples_loading_and_manipulating_PCM_RAW_audio_files/
+/sample_input/
+/notes/
+.xml
