@@ -91,7 +91,7 @@ for(auto value: ad.audio_data){
       std::vector<S> new_v;
       audio<T,S> new_audio(new_v);
       std::cout<<"go here\n";
-    if(sample==rhs.sample && channel==rhs.channel && sampling_rate==rhs.sampling_rate){
+    if(true){//sample==rhs.sample && channel==rhs.channel && sampling_rate==rhs.sampling_rate
       new_audio=*this;
         std::cout<<"go here2\n";
       for(auto value:rhs.audio_data){
@@ -301,7 +301,7 @@ for(auto value: ad.audio_data){
       audio<T,std::pair<T,T>> new_audio(new_v);
       std::cout<<"go here specialising\n";
       
-    if(sample==rhs.sample && channel==rhs.channel && sampling_rate==rhs.sampling_rate){
+    if(true){//sample==rhs.sample && channel==rhs.channel && sampling_rate==rhs.sampling_rate
       
       new_audio=*this;
         std::cout<<"go here2 specialising\n";
@@ -416,24 +416,25 @@ for(auto value: ad.audio_data){
   class normalise{
     double rms1;
     double rms2;
-     double desired;
+     double desired1;
+     double desired2;
   public:  
   
-  normalise(double _rms1,double _rms2,double desired):rms1(_rms1),rms2(_rms2),desired(desired){ }
+  normalise(double _rms1,double _rms2,double _desired1,double _desired2):rms1(_rms1),rms2(_rms2),desired1(_desired1),desired2(_desired2){ }
   std::pair<T,T> operator()(const W& ampl){
    
   
-   return std::make_pair((T)ampl.first*(desired/rms1),(T)ampl.second*(desired/rms2));
+   return std::make_pair((T)ampl.first*(desired1/rms1),(T)ampl.second*(desired2/rms2));
     }
   
     
   };
   
-  void normaliseAudio(double desired){
+  void normaliseAudio(double desired1,double desired2){
     
     this->rms_cal();//calculate rms
     
-    std::transform(this->audio_data.begin(),this->audio_data.end(),this->audio_data.begin(), normalise<std::pair<T,T>>(this->rms1,this->rms2,desired));
+    std::transform(this->audio_data.begin(),this->audio_data.end(),this->audio_data.begin(), normalise<std::pair<T,T>>(this->rms1,this->rms2,desired1,desired2));
     
     int first;
     int second;
