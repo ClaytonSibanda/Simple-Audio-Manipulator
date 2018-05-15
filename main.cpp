@@ -29,13 +29,38 @@ vector<T> readFile(string filename){
 
 
 	file.read((char*)(&(v_audio[0])),(int)numberOfSamples);
-//	int i=0;
-// for (auto item: v_audio){
-//     cout<<(int)item<<endl;
-//     if(i>50) break;
-//     i++;
-// }
+
     return  v_audio;
+}
+
+template <T>
+vector<pair<T,T>> readFileStereo(string filename){
+
+    ifstream file(filename,ios::in|ios::binary);
+
+//determine the size of the file
+//    cout<<"we here it started read"<<endl;
+    file.seekg(0,file.end);;
+    int fileSize=file.tellg();
+    file.seekg(0,file.beg);
+    double numberOfSamples;
+    int size=sizeof(pair<T,T>);
+    int channels =1;
+
+    numberOfSamples= fileSize/(channels*(float)size);
+
+    vector<T> v_audio;
+    vector<pair<T,T> > v_stereo;
+    v_audio.resize(numberOfSamples);
+
+    file.read((char*)(&(v_audio[0])),(int)numberOfSamples);
+
+
+    for(int i=0;i<v_audio.size()-1;i=i+2){
+        v_stereo.push_back(make_pair(v_audio[i],v_audio[i+1]));
+    }
+
+    return  v_stereo;
 }
 
 template <typename T>
@@ -43,25 +68,55 @@ void writeFile(vector<T> &vec,string output){
 
     ofstream newFile(output, ios::out|ios::app);
 
+
     cout<<"file size in write "<<vec.size()<<endl;
     newFile.write( (char*)(&vec[0]), vec.size());
 }
 
-template <typename T,typename  S>
-void add(string sound1,string sound2, string outputfileName){
-    vector<S> vin=readFile<S>(sound1+".raw");//frogs18sec_44100_signed_8bit_mono
-    vector<S> vin2=readFile<S>(sound2+".raw");//countdown40sec_44100_signed_8bit_mono
-if(vin.size()==vin2.size()) {
-    audio < T, S > ad(vin);
-    audio < T, S > ad2(vin2);
-    audio < T, S > sum = ad + ad2;
+template <typename T>
+void writeStereo(vector<pair<T,T>> &vec,string output){
 
-    cout << "\n";
-   // cout << "sum data is " << ad2.audio_data.size() << endl;
-    writeFile(sum.audio_data, outputfileName);
+    ofstream newFile(output, ios::out|ios::app);
+
+    vector<T> v_audio;
+
+    for(auto item:vec){
+      v_audio.push_back(item.first);
+      v_audio.push_back(item.second);
+    }
+    cout<<"file size in write "<<vec.size()<<endl;
+    newFile.write( (char*)(&v_audio[0]), vec.size());
 }
-else
-    cout<<"The two files are not the same length\n";
+
+template <typename T,typename  S>
+void add(string sound1,string sound2, string outputfileName,int noCh){
+    if(noCh==1) {
+        vector <S> vin = readFile<S>(sound1 + ".raw");//frogs18sec_44100_signed_8bit_mono
+        vector <S> vin2 = readFile<S>(sound2 + ".raw");//countdown40sec_44100_signed_8bit_mono
+        if (vin.size() == vin2.size()) {
+            audio < T, S > ad(vin);
+            audio < T, S > ad2(vin2);
+            audio < T, S > sum = ad + ad2;
+
+            cout << "\n";
+            // cout << "sum data is " << ad2.audio_data.size() << endl;
+            writeFile(sum.audio_data, outputfileName);
+        } else
+            cout << "The two files are not the same length\n";
+    } else{
+        vector <S> vin = readFileStereo(sound1 + ".raw");//frogs18sec_44100_signed_8bit_mono
+        vector <S> vin2 = readFileStereo(sound2 + ".raw");//countdown40sec_44100_signed_8bit_mono
+        if (vin.size() == vin2.size()) {
+            audio < T, S > ad(vin);
+            audio < T, S > ad2(vin2);
+            audio < T, S > sum = ad + ad2;
+
+            cout << "\n";
+            // cout << "sum data is " << ad2.audio_data.size() << endl;
+            writeStereo(sum.audio_data, outputfileName);
+        } else
+            cout << "The two files are not the same length\n";
+    }
 }
 
 
