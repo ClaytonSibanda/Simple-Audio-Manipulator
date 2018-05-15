@@ -13,65 +13,63 @@ vector<T> readFile(string filename){
 	ifstream file(filename,ios::in|ios::binary) ;
 
 //determine the size of the file
-
+//    cout<<"we here it started read"<<endl;
 	file.seekg(0,file.end);;
 	int fileSize=file.tellg();
 	file.seekg(0,file.beg);
-	double numberOfSamples;
+	int numberOfSamples;
 	int size=sizeof(T);
 	int channels =1;
+//    cout<<"we here it started read2"<<endl;
 	numberOfSamples= fileSize/(channels*(float)size);
-	// file.read(,/)
-	vector<T> v_audio;
-	//vector<pair<T,T> > v_stereo;
-	v_audio.resize(numberOfSamples);
 
-	// int16_t * p =&(v_audio[0]);
+	vector<T> v_audio;
+//	cout<<"Number of samples is "<<numberOfSamples<<"file size is "<<fileSize<<"\n";
+	v_audio.reserve(numberOfSamples);
+
+//    cout<<"we here it started read3"<<endl;
 	file.read((char*)(&(v_audio[0])),(int)numberOfSamples);
 	int i=0;
-
-//	for(auto item:v_audio){
-//		cout<<(int)item<<endl;
-//		i++;
-//		if(i>50)
-//			break;
-//	}
+//    cout<<"we here it read"<<endl;
     return  v_audio;
+}
+
+template <typename T>
+void writeFile(vector<T> vec,string output){
+    int size = vec.size();
+    ofstream OutFile;
+    OutFile.open(output, ios::out | ios::binary);
+    OutFile.write( (char*)&vec, size);
 }
 
 int main(int argc,char* argv[]) {
 	//samp -r sampleRateInHz -b bitCount -c noChannels [-o outFileName ] [<ops>]soundFile1 [soundFile2]
- if(argc>1){string outputfileName= argv[8];
+
+ string outputfileName= argv[8];
 	int sampleRate = stoi(argv[2]);
 	int bitCount = stoi(argv[4]);
 	int noChannels = stoi(argv[6]);
 
 string ops = argv[9];
 
-string sound1=argv[10];}
+string sound1=argv[10];
 string sound2;
 if(argc==12)
 	sound2 = argv[11];
-
-
-//read the file now
-vector<int8_t> vin=readFile<int8_t>("countdown40sec_44100_signed_8bit_mono.raw");
-vector<int8_t> vin2=readFile<int8_t>("frogs18sec_44100_signed_8bit_mono.raw");
+cout<<"sound2 is "<<sound2<<endl;
+    cout<<"sound1 is "<<sound1<<endl;
+if(ops=="-add"){
+    cout<<"we here"<<endl;
+    vector<int8_t> vin=readFile<int8_t>(sound1+".raw");
+    vector<int8_t> vin2=readFile<int8_t>(sound2+".raw");
+    cout<<"we here2"<<endl;
     audio<int8_t, int8_t> ad(vin);
     audio<int8_t, int8_t> ad2(vin2);
- 	audio<int8_t,int8_t> sum = ad|ad2;
+    audio<int8_t,int8_t> sum = ad|ad2;
+    //write sum to a file
 
- 	for (auto val : sum.audio_data) {
- 		cout <<"aud is "<<(int)val << endl;
- 	}
-cout<<"size is "<<vin.size()<<endl;
-
-
-
-
-
-
-
+     writeFile(sum.audio_data,outputfileName);
+}
 
 
 
