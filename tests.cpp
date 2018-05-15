@@ -13,7 +13,7 @@
 
 // 	for(int i=1;i<6;i++){
 // 	v_audio3.push_back(make_pair(i,i+1));
-// 	v_audio4.push_back(make_pair(i+1,i+2));
+// 	v_audio4.push_back(std::make_pair(i+1,i+2));
 // 	}
 
 // 	audio<int8_t,pair<int8_t,int8_t>> aud1(v_audio3);
@@ -203,8 +203,8 @@
  // audio<int8_t, int8_t> aud2(v_aud2);
  // audio<int16_t,int16_t> aud3(v_aud1);
  audio<int16_t, int16_t> aud4(v_aud2);
- aud4*pair<float,float>(0.5,0.5);
- aud1*pair<float,float>(0.1,0.5);
+ aud4*std::pair<float,float>(0.5,0.5);
+ aud1*std::pair<float,float>(0.1,0.5);
 
  REQUIRE(aud4.audio_data[0]==1);
  REQUIRE(aud4.audio_data[1] == 2);
@@ -246,7 +246,7 @@
  audio<int16_t,int16_t> aud3(v_aud1);
  audio<int16_t, int16_t> aud4(v_aud2);
  // audio<int16_t,int16_t> sum1 = aud3+aud4;
- aud4 ^ pair<int, int>(0, 1);
+ aud4 ^ std::pair<int, int>(0, 1);
 
 
 
