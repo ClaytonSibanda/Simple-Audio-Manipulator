@@ -124,9 +124,17 @@ REQUIRE(aud1.audio_data[0].first == 3);
  }
 
 TEST_CASE("RANGE ADD, STEREO",""){
+    std::vector<std::pair<int8_t,int8_t>> v_audio3;
+    std::vector<std::pair<int8_t,int8_t>> v_audio4;
+
+    for(int i=1;i<6;i++){
+        v_audio3.push_back(std::make_pair(i,i+1));
+        v_audio4.push_back(std::make_pair(i+1,i+2));
+    }
+
     std::vector<int16_t> v_aud1 = {1, 1, 1, 3,-2};
     std::vector<int16_t> v_aud2 = {2, 4, -10, 127, -128};
-    
+
     audio<int16_t,int16_t> aud3(v_aud1);
     audio<int16_t, int16_t> aud4(v_aud2);
 
@@ -141,6 +149,18 @@ TEST_CASE("RANGE ADD, STEREO",""){
 }
 
 TEST_CASE("COMPUTE RMS, STEREO",""){
+
+    std::vector<std::pair<int8_t,int8_t>> v_audio3;
+    std::vector<std::pair<int8_t,int8_t>> v_audio4;
+
+    for(int i=1;i<6;i++){
+        v_audio3.push_back(std::make_pair(i,i+1));
+        v_audio4.push_back(std::make_pair(i+1,i+2));
+    }
+
+
+
+
     std::vector<int16_t> v_aud1 = {1, 1, 1, 3,-2};
     std::vector<int16_t> v_aud2 = {1, 1, 1, 1, 1};
 
@@ -156,6 +176,18 @@ TEST_CASE("COMPUTE RMS, STEREO",""){
 }
 
 TEST_CASE("NORMALISE, STEREO","") {
+
+    std::vector<std::pair<int8_t,int8_t>> v_audio3;
+    std::vector<std::pair<int8_t,int8_t>> v_audio4;
+
+    for(int i=1;i<6;i++){
+        v_audio3.push_back(std::make_pair(i,i+1));
+        v_audio4.push_back(std::make_pair(i+1,i+2));
+    }
+
+
+
+
     std::vector <int16_t> v_aud1 = {1, 1, 1, 3, -2};
     std::vector <int16_t> v_aud2 = {1, 1, 1, 1, 1};
 
