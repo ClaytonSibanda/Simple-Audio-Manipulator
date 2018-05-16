@@ -105,26 +105,23 @@ REQUIRE(aud1.audio_data[0].first == 3);
 
  }
 
-// TEST_CASE("reverse, STEREO",""){
-// //	std::vector<pair<int8_t,int8_t>> v_audio3;
-// 	std::vector<pair<int8_t,int8_t>> v_audio4;
+ TEST_CASE("reverse, STEREO",""){
+ 	std::vector<std::pair<int8_t,int8_t>> v_audio3;
+ 	std::vector<std::pair<int8_t,int8_t>> v_audio4;
 
-// 	for(int i=1;i<6;i++){
-// 	v_audio3.push_back(make_pair(i,i+1));
-// 	v_audio4.push_back(make_pair(i+1,i+2));
-// 	}
+ 	for(int i=1;i<6;i++){
+ 	v_audio3.push_back(std::make_pair(i,i+1));
+ 	v_audio4.push_back(std::make_pair(i+1,i+2));
+ 	}
 
-// 	audio<int8_t,pair<int8_t,int8_t>> aud1(v_audio3);
-// aud1.reverse()<float,float>(0.5,0.5);// works
-// REQUIRE(aud4.audio_data[0]==1);
-// REQUIRE(aud4.audio_data[1] == 2);
-// REQUIRE(aud4.audio_data[2] == -5);
-// REQUIRE(aud4.audio_data[3] == 50);
-// REQUIRE(aud4.audio_data[4] == -20);
-// // REQUIRE(sum.audio_data[5] == 3);
+ 	audio<int8_t,std::pair<int8_t,int8_t>> aud4(v_audio3);
+ aud4.reverse();
 
+ REQUIRE(aud4.audio_data.size()==5);
+ REQUIRE(aud4.audio_data[0].first == 5);
+ REQUIRE(aud4.audio_data[0].second == 6);
 
-// }
+ }
 
 
 
