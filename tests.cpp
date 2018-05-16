@@ -105,7 +105,7 @@ REQUIRE(aud1.audio_data[0].first == 3);
 
  }
 
- TEST_CASE("reverse, STEREO",""){
+ TEST_CASE("REVERSE, STEREO",""){
  	std::vector<std::pair<int8_t,int8_t>> v_audio3;
  	std::vector<std::pair<int8_t,int8_t>> v_audio4;
 
@@ -123,29 +123,51 @@ REQUIRE(aud1.audio_data[0].first == 3);
 
  }
 
+TEST_CASE("RANGE ADD, STEREO",""){
+    std::vector<int16_t> v_aud1 = {1, 1, 1, 3,-2};
+    std::vector<int16_t> v_aud2 = {2, 4, -10, 127, -128};
+    
+    audio<int16_t,int16_t> aud3(v_aud1);
+    audio<int16_t, int16_t> aud4(v_aud2);
+
+    audio<int16_t,int16_t>::rangedAdd rAdd;//function object
+    audio<int16_t,int16_t> range_sum = rAdd(aud3,0,3,aud4,0,3);
+
+    REQUIRE(range_sum.audio_data[0]==3);
+    REQUIRE(range_sum.audio_data[1] == 5);
+    REQUIRE(range_sum.audio_data[2]==-9);
+    REQUIRE(range_sum.audio_data[3] == 127);
+
+}
+
+TEST_CASE("COMPUTE RMS, STEREO",""){
+    std::vector<int16_t> v_aud1 = {1, 1, 1, 3,-2};
+    std::vector<int16_t> v_aud2 = {1, 1, 1, 1, 1};
 
 
-// TEST_CASE("reverse, STEREO",""){
-// //	std::vector<pair<int8_t,int8_t>> v_audio3;
-// 	std::vector<pair<int8_t,int8_t>> v_audio4;
+    audio<int16_t,int16_t> aud3(v_aud1);
+    audio<int16_t, int16_t> aud4(v_aud2);
 
-// 	for(int i=1;i<6;i++){
-// 	v_audio3.push_back(make_pair(i,i+1));
-// 	v_audio4.push_back(make_pair(i+1,i+2));
-// 	}
+    aud3.rms_cal();
+    aud4.rms_cal();
+    REQUIRE(aud3.rms<2);
+    REQUIRE(aud4.rms==1.0);
 
-// 	audio<int8_t,pair<int8_t,int8_t>> aud1(v_audio3);
-// audio<int8_t,pair<int8_t,int8_t>>::rangedAdd rAdd;//function object
-// audio<int8_t,pair<int8_t,int8_t>> range_sum = rAdd(aud1,0,3,aud2,0,3);
-// REQUIRE(aud4.audio_data[0]==1);
-// REQUIRE(aud4.audio_data[1] == 2);
-// REQUIRE(aud4.audio_data[2] == -5);
-// REQUIRE(aud4.audio_data[3] == 50);
-// REQUIRE(aud4.audio_data[4] == -20);
-// // REQUIRE(sum.audio_data[5] == 3);
+}
+
+TEST_CASE("NORMALISE, STEREO","") {
+    std::vector <int16_t> v_aud1 = {1, 1, 1, 3, -2};
+    std::vector <int16_t> v_aud2 = {1, 1, 1, 1, 1};
 
 
-// }
+    audio < int16_t, int16_t > aud3(v_aud1);
+    audio < int16_t, int16_t > aud4(v_aud2);
+
+    aud3.rms_cal();
+    aud4.rms_cal();
+    REQUIRE(aud3.rms < 2);
+    REQUIRE(aud4.rms == 1.0);
+}
 
 
 
